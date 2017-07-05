@@ -16,7 +16,11 @@ public class AlarmMessageDAO {
 	@SuppressWarnings("null")
 	public List<AlarmMessage> getAlarmMessages()throws Exception{
 		ArrayList<AlarmMessage> alarmMessages=new ArrayList<AlarmMessage>();
-		String sSQL="select * from alarm_message where message_status=0";
+		String sSQL="select * "
+				+ " from alarm_message "
+				+ " where message_status=0"
+				+ " and MESSAGE_SEND_TYPE in ('43','44')"
+				+ " order by CREATE_TIME asc";
 		Statement stmt=null;
 		Connection Conn=null;
 		ResultSet rs=null;
@@ -32,11 +36,22 @@ public class AlarmMessageDAO {
 				if(!rs.getString(3).isEmpty())
 					messages.setAppName(rs.getString(3));
 				messages.setFactoryCode(rs.getString(4));
-				messages.setMessageTitle(rs.getString(5).trim());
-				if(rs.getString(6).trim().getBytes().length>130&&rs.getInt(7)!=2)
-					messages.setMessageContent(rs.getString(6).trim());
+				if(rs.getString(5)!=null)
+					messages.setMessageTitle(rs.getString(5).trim());
 				else
-					messages.setMessageContent(rs.getString(6));
+					messages.setMessageTitle("No Value");
+				
+				if(rs.getString(6)!=null){
+					if(rs.getString(6).trim().getBytes().length>130&&rs.getInt(7)!=2)
+						messages.setMessageContent(rs.getString(6).trim());
+					else
+						messages.setMessageContent(rs.getString(6));
+				}
+				else
+					messages.setMessageContent("No Value");
+				
+				
+
 				messages.setMessageSendType(rs.getInt(7));
 				messages.setReceiverPriority(rs.getInt(8));
 				messages.setMessageStatus(rs.getInt(9));
@@ -45,15 +60,20 @@ public class AlarmMessageDAO {
 				messages.setDrivedGroupID(rs.getString(13));
 				messages.setAppendParamter(rs.getString(14));
 				messages.setWeChatAppID(rs.getInt(15));
+				messages.setSingleMsg(rs.getInt(17));
 				alarmMessages.add(messages);
 			}
 			
 			rs.close();
 			stmt.close();
-			Conn.close();
+			
 		}
 		catch(Exception ex){
 			logger.error("Get Alarm Message is failed, due to: ",ex);
+		}
+		finally{
+			if(!Conn.isClosed())
+				Conn.close();
 		}
 		return alarmMessages;
 	}

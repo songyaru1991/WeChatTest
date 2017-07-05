@@ -22,16 +22,22 @@ public class InitialAccessTokenThread implements Runnable {
 					logger.info(String.format("獲取Access Token中，有效時間為%d token:%s", accessToken.getExpiresIn(), accessToken.getAccessToken()));
                     String result = String.format("獲取Access Token中，有效時間為%d token:%s", accessToken.getExpiresIn(), accessToken.getAccessToken()); 
                     System.out.println(result);
-                    // ÐÝÃß7000Ãë
+                   
                     if(WeChatThread==null){
-                    	WeChatThread=new Thread(new WeChatThread(accessToken.getAccessToken()));
+                    	WeChatThread=new Thread(new WeChatThread());
                     	WeChatThread.start();
                     }
+                    else{
+                    	if(!WeChatThread.isAlive()){
+                    		WeChatThread=null;
+                    		WeChatThread=new Thread(new WeChatThread());
+                        	WeChatThread.start();
+                    	}
+                    }
                     System.out.println("Get AccessToken Thread is sleep 720000 seconds. ");
-                    Thread.currentThread().sleep((accessToken.getExpiresIn()-200)*1000);
-                    
+                    Thread.currentThread().sleep((accessToken.getExpiresIn()+6000)*1000);
                     //For Test
-                    //Thread.currentThread().sleep(300000);
+                    //Thread.currentThread().sleep(120000);
                     WeChatThread.sleep(60*100);
 				}
 				else{

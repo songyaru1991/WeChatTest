@@ -26,6 +26,7 @@ public class DatabaseUtility {
 		DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
 		/*Oracle DB*/
 		String URL="jdbc:oracle:thin:@//"+serverName+":"+port+"/"+SID+"";
+		//String URL="jdbc:oracle:thin:@//10.8.91.142:1521/AlarmTestDB";
 		conn= DriverManager.getConnection(URL, userName, password);
 		return conn;
 	};
@@ -35,7 +36,8 @@ public class DatabaseUtility {
 		//Mac: /Users/sfc/Desktop/dbConfig.json
 		JSONParser parseDBconfig=new JSONParser();
 		JSONObject getDBconfig=(JSONObject) parseDBconfig.parse(new FileReader("/Users/sfc/Desktop/dbConfig.json"));
-		JSONObject getDBconfigDetail=new JSONObject((JSONObject)getDBconfig.get(server));
+		/*JSONObject getDBconfigDetail=new JSONObject((JSONObject)getDBconfig.get(server));*/
+		 JSONObject getDBconfigDetail = (JSONObject) getDBconfig.get(server);
 		if(getDBconfigDetail!=null){
 			this.serverName=(String) getDBconfigDetail.get("serverName");
 			this.port=(String)getDBconfigDetail.get("port");

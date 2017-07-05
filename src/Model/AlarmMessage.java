@@ -17,6 +17,7 @@ public class AlarmMessage {
 	private String drivedGroupID;
 	private String appendParamter;
 	private int WeChatAppID;
+	private int isSingleMsg;
 	
 	public String getSystemName() {
 		return systemName;
@@ -145,5 +146,11 @@ public class AlarmMessage {
 	}
 	public void setWeChatAppID(int weChatAppID) {
 		WeChatAppID = weChatAppID;
+	}
+	public int getSingleMsg() {
+		return isSingleMsg;
+	}
+	public void setSingleMsg(int isSingleMsg) {
+		this.isSingleMsg = isSingleMsg;
 	}
 }
